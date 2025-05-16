@@ -5,13 +5,13 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sig.SecurityService.Tenant", "Sig.SecurityService.Tenant", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityService.Tenant.Domain", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.Domain\Sig.SecurityService.Tenant.Domain.csproj", "{13BE44AF-8A53-4E6B-8147-016BCAC9C47A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityServiceTenant.Domain", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.Domain\Sig.SecurityServiceTenant.Domain.csproj", "{13BE44AF-8A53-4E6B-8147-016BCAC9C47A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityService.Tenant.ORM", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.ORM\Sig.SecurityService.Tenant.ORM.csproj", "{BC7113EF-F49F-409B-8B3C-357852593D9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityServiceTenant.ORM", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.ORM\Sig.SecurityServiceTenant.ORM.csproj", "{BC7113EF-F49F-409B-8B3C-357852593D9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityService.Tenant.Application", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.Application\Sig.SecurityService.Tenant.Application.csproj", "{69A14067-8242-4CEF-AC60-E6D196AD809C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityService.Tenant.WebApi", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.WebApi\Sig.SecurityService.Tenant.WebApi.csproj", "{86436D7A-B744-433D-B1FE-1BA5B44091D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityServiceTenant.WebApi", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.WebApi\Sig.SecurityServiceTenant.WebApi.csproj", "{86436D7A-B744-433D-B1FE-1BA5B44091D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sig.SecurityService.Tenant.Common", "src\Sig.SecurityService.Tenant\Sig.SecurityService.Tenant.Common\Sig.SecurityService.Tenant.Common.csproj", "{EB1A4714-EA23-4A77-B6BE-485F412C7DDD}"
 EndProject
