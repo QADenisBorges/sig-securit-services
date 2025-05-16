@@ -1,0 +1,6 @@
+@Sig.SecurityService.Tenant.WebApi_HostAddress = http://localhost:5107
+
+GET {{Sig.SecurityService.Tenant.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
