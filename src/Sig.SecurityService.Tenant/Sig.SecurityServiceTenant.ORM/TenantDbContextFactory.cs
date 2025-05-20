@@ -17,11 +17,16 @@ public class TenantDbContextFactory : IDesignTimeDbContextFactory<TenantDbContex
             .Build();
 
         var builder = new DbContextOptionsBuilder<TenantDbContext>();
-        var connectionString = configuration.GetConnectionString("DbSecurityServiceTenant"); // Corrigido aqui
+        var connectionString = configuration.GetConnectionString("DbSecurityServiceTenant"); 
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            Console.WriteLine("❌ Connection string not found!");
+        }
 
         builder.UseSqlServer(
-            
-        sqlServer => sqlServer.MigrationsAssembly("Sig.SecurityServiceTenant.ORM")
+            connectionString,
+            sqlServer => sqlServer.MigrationsAssembly("Sig.SecurityServiceTenant.ORM")
         );
 
         return new TenantDbContext(builder.Options);

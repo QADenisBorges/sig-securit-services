@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Sig.SecurityServiceTenant.ORM;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

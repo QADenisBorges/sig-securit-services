@@ -2,10 +2,14 @@
 
 public class Plan
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public decimal MonthlyPrice { get; set; }
-    public int MaxUsers { get; set; }
 
-    public ICollection<Tenant> Tenants { get; set; }
+    public Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required decimal MonthlyPrice { get; set; }
+    public required int MaxUsers { get; set; }
+
+    public required ICollection<Tenant> Tenants { get; set; }
+    public Plan()
+    {
+    }
 }
