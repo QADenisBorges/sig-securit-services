@@ -50,7 +50,7 @@ public class ExceptionError : CustomError
         }
     }
 
-    protected override object BuildToObject()
+    public override object ToObjectResponse()
     {
         return new
         {

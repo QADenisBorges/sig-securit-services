@@ -5,35 +5,33 @@ namespace Sig.SecurityService.Tenant.Common.Results.CustomErrors;
 
 public abstract class CustomError : Error
 {
-    private readonly string _code;
-    private readonly string _message;
-    private readonly string _source;
+    public readonly string Code;
+    public readonly string Message;
+    public readonly string Source;
 
     protected CustomError(Type sourceType, string code, string message)
         : base(message)
     {
-        _code = code;
-        _message = message;
-        _source = sourceType.Name;
+        Code = code;
+        Message = message;
+        Source = sourceType.Name;
 
-        Metadata[nameof(_code)] = code;
-        Metadata[nameof(_message)] = message;
-        Metadata[nameof(_source)] = _source;
+        Metadata[nameof(Code)] = code;
+        Metadata[nameof(Message)] = message;
+        Metadata[nameof(Source)] = Source;
     }
 
-    protected abstract object BuildToObject();
-
-    public virtual object ToObject()
+    public virtual object ToObjectResponse()
     {
         return new
         {
-            Type = GetType().Name,
-            ErrorDetail = BuildToObject(),
-            Metadata = Metadata.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+            Type = Source,
+            Code,
+            Message
         };
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(ToObject(), new JsonSerializerOptions { WriteIndented = true });
+        JsonSerializer.Serialize(ToObjectResponse(), new JsonSerializerOptions { WriteIndented = true });
 }
 

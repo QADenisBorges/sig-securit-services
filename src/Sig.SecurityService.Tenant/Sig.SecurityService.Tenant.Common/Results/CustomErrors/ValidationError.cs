@@ -21,7 +21,7 @@ public class ValidationError : CustomError
             Metadata.TryAdd($"Property-{failure.PropertyName}", failure.ErrorMessage);
     }
 
-    protected override object BuildToObject()
+    public override object ToObjectResponse()
     {
         return new
         {
