@@ -4,9 +4,6 @@ using Sig.SecurityServiceTenant.Domain.Interfaces;
 
 namespace Sig.SecurityServiceTenant.ORM.Repositories;
 
-public class TenantRepository : BaseRepository<Tenant>, ITenantRepository
+public class TenantRepository(DbContext context) : BaseRepository<Tenant>(context), ITenantRepository
 {
-    public TenantRepository(DbContext context) : base(context)
-    {
-    }
 }

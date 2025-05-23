@@ -1,9 +1,9 @@
-﻿namespace Sig.SecurityServiceTenant.Domain.Entities;
+﻿using Sig.SecurityServiceTenant.Domain.Entities.Base;
 
-public class Plan
+namespace Sig.SecurityServiceTenant.Domain.Entities;
+
+public class Plan : BaseEntity
 {
-
-    public Guid Id { get; set; }
     public required string Name { get; set; }
     public required decimal MonthlyPrice { get; set; }
     public required int MaxUsers { get; set; }

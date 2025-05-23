@@ -1,4 +1,4 @@
-﻿namespace Sig.SecurityService.Tenant.WebApi.Features.Tenants.CreateTenant;
+﻿namespace Sig.SecurityServiceTenant.WebApi.Features.Tenants.CreateTenant;
 
 public class CreateTenantValidator
 {

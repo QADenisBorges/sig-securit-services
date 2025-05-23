@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="UseCases\LocationReferences\City\" />
+    <Folder Include="UseCases\LocationReferences\PostalCode\" />
+    <Folder Include="UseCases\LocationReferences\State\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.16.0" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sig.SecurityService.Tenant.Common\Sig.SecurityService.Tenant.Common.csproj" />
+    <ProjectReference Include="..\Sig.SecurityService.Tenant.Domain\Sig.SecurityServiceTenant.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

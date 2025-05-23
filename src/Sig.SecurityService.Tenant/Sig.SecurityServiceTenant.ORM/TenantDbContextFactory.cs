@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Sig.SecurityServiceTenant.ORM;
 
@@ -17,11 +16,13 @@ public class TenantDbContextFactory : IDesignTimeDbContextFactory<TenantDbContex
             .Build();
 
         var builder = new DbContextOptionsBuilder<TenantDbContext>();
-        var connectionString = configuration.GetConnectionString("DbSecurityServiceTenant"); 
 
-        if (string.IsNullOrEmpty(connectionString))
+        var connectionStringKey = "DbSecurityServiceTenant";
+        var connectionString = configuration.GetConnectionString(connectionStringKey);
+
+        if (string.IsNullOrEmpty(connectionStringKey))
         {
-            Console.WriteLine("❌ Connection string not found!");
+            Console.WriteLine("Connection string not found!");
         }
 
         builder.UseSqlServer(

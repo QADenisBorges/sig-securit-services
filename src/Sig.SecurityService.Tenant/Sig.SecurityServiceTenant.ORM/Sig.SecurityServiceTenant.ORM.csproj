@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sig.SecurityService.Tenant.Common\Sig.SecurityService.Tenant.Common.csproj" />
     <ProjectReference Include="..\Sig.SecurityService.Tenant.Domain\Sig.SecurityServiceTenant.Domain.csproj" />
   </ItemGroup>
 

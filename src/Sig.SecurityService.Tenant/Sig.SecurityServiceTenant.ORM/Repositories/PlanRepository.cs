@@ -4,9 +4,6 @@ using Sig.SecurityServiceTenant.Domain.Interfaces;
 
 namespace Sig.SecurityServiceTenant.ORM.Repositories;
 
-public class PlanRepository : BaseRepository<Plan>, IPlanRepository
+public class PlanRepository(DbContext context) : BaseRepository<Plan>(context), IPlanRepository
 {
-    public PlanRepository(DbContext context) : base(context)
-    {
-    }
 }

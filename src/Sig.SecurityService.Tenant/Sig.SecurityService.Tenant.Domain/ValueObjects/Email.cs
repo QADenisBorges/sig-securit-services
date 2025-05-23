@@ -1,9 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Sig.SecurityServiceTenant.Domain.ObjectValues;
+namespace Sig.SecurityServiceTenant.Domain.ValueObjects;
 
 [Owned]
 public sealed class Email
 {
-    public required string Address { get; set; }
+    public string Address { get; set; }
+
+    public Email(string address)
+    {
+        Address = address;
+    }
 }

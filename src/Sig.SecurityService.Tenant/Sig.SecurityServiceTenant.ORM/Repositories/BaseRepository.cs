@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using Sig.SecurityService.Tenant.Common.Results.CustomErrors;
 using Sig.SecurityServiceTenant.Domain.Interfaces;
 
 namespace Sig.SecurityServiceTenant.ORM.Repositories;
@@ -17,24 +18,50 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<Result<T>> GetByIdAsync(Guid id)
     {
-        var entity = await _dbSet.FindAsync(id);
-        if (entity == null)
-            return Result.Fail<T>("Entity not found.");
-
-        return Result.Ok(entity);
+        try
+        {
+            var entity = await _dbSet.FindAsync(id);
+            return entity is null
+                ? new ExceptionError($"{typeof(T).Name} not found.")
+                : Result.Ok(entity);
+        }
+        catch (Exception ex)
+        {
+            return new ExceptionError(ex);
+        }
     }
 
     public async Task<Result> AddAsync(T entity)
     {
-        await _dbSet.AddAsync(entity);
-        var saved = await _context.SaveChangesAsync() > 0;
-        return saved ? Result.Ok() : Result.Fail("Failed to save entity.");
+        try
+        {
+            await _dbSet.AddAsync(entity);
+            var saved = await _context.SaveChangesAsync() > 0;
+
+            return saved
+                ? Result.Ok()
+                : Result.Fail(new Error($"Failed to save {typeof(T).Name}."));
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(new ExceptionalError(ex));
+        }
     }
 
     public async Task<Result> UpdateAsync(T entity)
     {
-        _dbSet.Update(entity);
-        var saved = await _context.SaveChangesAsync() > 0;
-        return saved ? Result.Ok() : Result.Fail("Failed to update entity.");
+        try
+        {
+            _dbSet.Update(entity);
+            var saved = await _context.SaveChangesAsync() > 0;
+
+            return saved
+                ? Result.Ok()
+                : Result.Fail(new Error($"Failed to update {typeof(T).Name}."));
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(new ExceptionalError(ex));
+        }
     }
 }

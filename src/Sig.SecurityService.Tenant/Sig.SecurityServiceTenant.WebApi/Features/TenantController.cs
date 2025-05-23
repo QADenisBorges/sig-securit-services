@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Sig.SecurityService.Tenant.WebApi.Controllers
+namespace Sig.SecurityServiceTenant.WebApi.Features
 {
     [ApiController]
     [Route("[controller]")]

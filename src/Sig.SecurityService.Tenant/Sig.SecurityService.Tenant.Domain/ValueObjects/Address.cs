@@ -1,4 +1,4 @@
-﻿namespace Sig.SecurityServiceTenant.Domain.ObjectValues;
+﻿namespace Sig.SecurityServiceTenant.Domain.ValueObjects;
 
 public class Address
 {
