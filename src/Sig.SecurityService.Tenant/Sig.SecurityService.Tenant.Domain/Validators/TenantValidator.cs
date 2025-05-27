@@ -7,9 +7,15 @@ public class TenantValidator : AbstractValidator<Tenant>
 {
     public TenantValidator()
     {
+        RuleFor(x => x.Id)
+           .NotEmpty();
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(100);
+
+        RuleFor(x => x.CreatedAt)
+           .NotEqual(DateTime.MinValue);
 
         RuleFor(x => x.Email)
             .SetValidator(new EmailValidator());
@@ -22,17 +28,5 @@ public class TenantValidator : AbstractValidator<Tenant>
 
         RuleFor(x => x.WhatsappPhone)
             .SetValidator(new PhoneValidator());
-
-        When(x => x.Address != null, () =>
-        {
-            RuleFor(x => x.Address!)
-                .SetValidator(new AddressValidator());
-        });
-
-        When(x => x.Plan != null, () =>
-        {
-            RuleFor(x => x.Plan!)
-                .SetValidator(new PlanValidator());
-        });
     }
 }

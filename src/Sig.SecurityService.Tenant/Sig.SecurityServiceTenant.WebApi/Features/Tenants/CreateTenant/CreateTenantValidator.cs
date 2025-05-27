@@ -1,5 +1,7 @@
-﻿namespace Sig.SecurityServiceTenant.WebApi.Features.Tenants.CreateTenant;
+﻿using FluentValidation;
 
-public class CreateTenantValidator
+namespace Sig.SecurityServiceTenant.WebApi.Features.Tenants.CreateTenant;
+
+public class CreateTenantValidator : AbstractValidator<CreateTenantRequest>
 {
 }

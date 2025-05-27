@@ -1,67 +1,92 @@
 ﻿using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using Sig.SecurityService.Tenant.Common.Results.CustomErrors;
+using Sig.SecurityService.Tenant.Common.FluentResults.CustomErrors;
 using Sig.SecurityServiceTenant.Domain.Interfaces;
 
 namespace Sig.SecurityServiceTenant.ORM.Repositories;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext _context;
-    protected readonly DbSet<T> _dbSet;
+    protected readonly DbSet<TEntity> _dbSet;
 
     public BaseRepository(DbContext context)
     {
-        _context = context;
-        _dbSet = _context.Set<T>();
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _dbSet = context.Set<TEntity>();
     }
 
-    public async Task<Result<T>> GetByIdAsync(Guid id)
+    public async Task<Result<TEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        => await _dbSet.FindAsync([id], cancellationToken);
+
+    public async Task<Result<TEntity>> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         try
         {
-            var entity = await _dbSet.FindAsync(id);
-            return entity is null
-                ? new ExceptionError($"{typeof(T).Name} not found.")
-                : Result.Ok(entity);
+            await _dbSet.AddAsync(entity, cancellationToken);
+            var changes = await _context.SaveChangesAsync(cancellationToken);
+
+            return changes == 1 ? 
+                Result.Ok(entity) : 
+                ExceptionalFailure.Fail("No changes were persisted to the database");
+        }
+        catch (DbUpdateException ex)
+        {
+            return ExceptionalFailure.Fail("Failed to create entity in database", ex);
         }
         catch (Exception ex)
         {
-            return new ExceptionError(ex);
+            return ExceptionalFailure.Fail("Unexpected error while creating entity", ex);
         }
     }
 
-    public async Task<Result> AddAsync(T entity)
-    {
-        try
-        {
-            await _dbSet.AddAsync(entity);
-            var saved = await _context.SaveChangesAsync() > 0;
-
-            return saved
-                ? Result.Ok()
-                : Result.Fail(new Error($"Failed to save {typeof(T).Name}."));
-        }
-        catch (Exception ex)
-        {
-            return Result.Fail(new ExceptionalError(ex));
-        }
-    }
-
-    public async Task<Result> UpdateAsync(T entity)
+    public async Task<Result<TEntity>> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         try
         {
             _dbSet.Update(entity);
-            var saved = await _context.SaveChangesAsync() > 0;
+            var changes = await _context.SaveChangesAsync(cancellationToken);
 
-            return saved
-                ? Result.Ok()
-                : Result.Fail(new Error($"Failed to update {typeof(T).Name}."));
+            return changes == 1 ?
+                Result.Ok(entity) :
+                ExceptionalFailure.Fail("No changes were persisted to the database");
+        }       
+        catch (DbUpdateConcurrencyException ex)
+        {
+            return ExceptionalFailure.Fail("Concurrency conflict during entity update", ex);
+        }
+        catch (DbUpdateException ex)
+        {
+            return ExceptionalFailure.Fail("Failed to update entity in database", ex);
         }
         catch (Exception ex)
         {
-            return Result.Fail(new ExceptionalError(ex));
+            return ExceptionalFailure.Fail("Unexpected error while updating entity", ex);
+        }
+    }
+
+    public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var entity = await _dbSet.FindAsync([id], cancellationToken);
+            if (entity == null)
+                return ValidatorFailure.Fail($"Entity with ID {id} not found");
+
+            _dbSet.Remove(entity);
+            var changes = await _context.SaveChangesAsync(cancellationToken);
+
+            return changes > 0
+                ? Result.Ok()
+                : ExceptionalFailure.Fail("No changes were persisted to the database");
+        }
+        catch (DbUpdateException ex)
+        {
+            return ExceptionalFailure.Fail("Failed to delete entity from database", ex);
+        }
+        catch (Exception ex)
+        {
+            return ExceptionalFailure.Fail("Unexpected error while deleting entity", ex);
         }
     }
 }

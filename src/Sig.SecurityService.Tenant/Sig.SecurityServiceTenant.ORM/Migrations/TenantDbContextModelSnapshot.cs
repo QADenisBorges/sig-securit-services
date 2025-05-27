@@ -22,33 +22,20 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.Plan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("MaxUsers")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("MonthlyPrice")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Plans", (string)null);
-                });
-
             modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreateByUserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreateByUserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -61,34 +48,82 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid?>("PlanId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("SubscriptionStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlanId");
+                    b.HasIndex("CreateByUserId");
 
                     b.ToTable("Tenants", (string)null);
                 });
 
+            modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
             modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.Tenant", b =>
                 {
-                    b.HasOne("Sig.SecurityServiceTenant.Domain.Entities.Plan", "Plan")
-                        .WithMany("Tenants")
-                        .HasForeignKey("PlanId");
+                    b.HasOne("Sig.SecurityServiceTenant.Domain.Entities.User", "CreatedByUser")
+                        .WithMany("CreatedTenants")
+                        .HasForeignKey("CreateByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ObjectValues.Phone", "Phone", b1 =>
+                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ValueObjects.Phone", "Phone", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Number")
-                                .IsRequired()
+                            b1.Property<int>("Ddd")
+                                .HasColumnType("int");
+
+                            b1.Property<long>("Number")
                                 .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("bigint")
+                                .HasColumnName("PhoneNumber");
 
                             b1.HasKey("TenantId");
 
@@ -98,15 +133,18 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                                 .HasForeignKey("TenantId");
                         });
 
-                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ObjectValues.Phone", "WhatsappPhone", b1 =>
+                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ValueObjects.Phone", "WhatsappPhone", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Number")
-                                .IsRequired()
+                            b1.Property<int>("Ddd")
+                                .HasColumnType("int");
+
+                            b1.Property<long>("Number")
                                 .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
+                                .HasColumnType("bigint")
+                                .HasColumnName("WhatsappNumber");
 
                             b1.HasKey("TenantId");
 
@@ -116,58 +154,7 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                                 .HasForeignKey("TenantId");
                         });
 
-                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ObjectValues.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("TenantId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(80)
-                                .HasColumnType("nvarchar(80)");
-
-                            b1.Property<string>("Complement")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.Property<string>("District")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasMaxLength(9)
-                                .HasColumnType("nvarchar(9)");
-
-                            b1.Property<string>("Reference")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("State")
-                                .IsRequired()
-                                .HasMaxLength(2)
-                                .HasColumnType("nvarchar(2)");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.HasKey("TenantId");
-
-                            b1.ToTable("Tenants");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TenantId");
-                        });
-
-                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ObjectValues.Document", "Document", b1 =>
+                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ValueObjects.Document", "Document", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
@@ -175,10 +162,8 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                             b1.Property<string>("Number")
                                 .IsRequired()
                                 .HasMaxLength(18)
-                                .HasColumnType("nvarchar(18)");
-
-                            b1.Property<int>("Type")
-                                .HasColumnType("int");
+                                .HasColumnType("nvarchar(18)")
+                                .HasColumnName("DocumentNumber");
 
                             b1.HasKey("TenantId");
 
@@ -188,7 +173,7 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                                 .HasForeignKey("TenantId");
                         });
 
-                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ObjectValues.Email", "Email", b1 =>
+                    b.OwnsOne("Sig.SecurityServiceTenant.Domain.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
@@ -196,7 +181,8 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                             b1.Property<string>("Address")
                                 .IsRequired()
                                 .HasMaxLength(150)
-                                .HasColumnType("nvarchar(150)");
+                                .HasColumnType("nvarchar(150)")
+                                .HasColumnName("EmailAddress");
 
                             b1.HasKey("TenantId");
 
@@ -206,7 +192,7 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                                 .HasForeignKey("TenantId");
                         });
 
-                    b.Navigation("Address");
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Document")
                         .IsRequired();
@@ -217,14 +203,13 @@ namespace Sig.SecurityServiceTenant.ORM.Migrations
                     b.Navigation("Phone")
                         .IsRequired();
 
-                    b.Navigation("Plan");
-
-                    b.Navigation("WhatsappPhone");
+                    b.Navigation("WhatsappPhone")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.Plan", b =>
+            modelBuilder.Entity("Sig.SecurityServiceTenant.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Tenants");
+                    b.Navigation("CreatedTenants");
                 });
 #pragma warning restore 612, 618
         }

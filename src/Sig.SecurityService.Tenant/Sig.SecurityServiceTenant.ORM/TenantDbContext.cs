@@ -7,12 +7,12 @@ namespace Sig.SecurityServiceTenant.ORM;
 public class TenantDbContext(DbContextOptions<TenantDbContext> options) : DbContext(options)
 {
     public DbSet<Tenant> Tenants { get; set; }
-    public DbSet<Plan> Plans { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new TenantConfiguration());
-        modelBuilder.ApplyConfiguration(new PlanConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }
 

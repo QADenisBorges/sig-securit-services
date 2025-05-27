@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
-using Sig.SecurityServiceTenant.Domain.Validations.Proprierties;
 
 namespace Sig.SecurityServiceTenant.Domain.Validators.Proprierties;
 

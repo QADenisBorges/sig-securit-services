@@ -16,68 +16,53 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(t => t.CreatedAt)
-            .IsRequired();
+        builder.Property(t => t.CreatedAt).IsRequired();
+        builder.Property(t => t.IsActive).IsRequired();
+        builder.Property(t => t.SubscriptionStatus).IsRequired();
 
-        builder.Property(t => t.IsActive)
-            .IsRequired();
+        builder.Property(t => t.CreateByUserId)
+            .IsRequired()
+            .HasMaxLength(50);
 
-        builder.Property(t => t.SubscriptionStatus)
-            .IsRequired();
+        builder.Property(t => t.CreateByUserName)
+            .IsRequired()
+            .HasMaxLength(100);
 
-        builder.HasOne(t => t.Plan)
-            .WithMany(p => p.Tenants)
-            .HasForeignKey(t => t.PlanId);
+        builder.HasOne(t => t.CreatedByUser)
+            .WithMany(p => p.CreatedTenants)
+            .HasForeignKey(t => t.CreateByUserId);
 
         builder.OwnsOne(t => t.Document, doc =>
         {
             doc.Property(d => d.Number)
+                .HasColumnName("DocumentNumber")
                 .HasMaxLength(18)
                 .IsRequired();
 
-            doc.Property(d => d.Type)
-                .IsRequired();
-
-            doc.WithOwner();
+            doc.Ignore(d => d.Type);
         });
 
         builder.OwnsOne(t => t.Email, email =>
         {
             email.Property(e => e.Address)
+                .HasColumnName("EmailAddress")
                 .HasMaxLength(150)
                 .IsRequired();
-
-            email.WithOwner();
         });
 
         builder.OwnsOne(t => t.Phone, phone =>
         {
             phone.Property(p => p.Number)
+                .HasColumnName("PhoneNumber")
                 .HasMaxLength(20)
                 .IsRequired();
-
-            phone.WithOwner();
         });
 
         builder.OwnsOne(t => t.WhatsappPhone, phone =>
         {
             phone.Property(p => p.Number)
+                .HasColumnName("WhatsappNumber")
                 .HasMaxLength(20);
-
-            phone.WithOwner();
-        });
-
-        builder.OwnsOne(t => t.Address, addr =>
-        {
-            addr.Property(a => a.Street).HasMaxLength(100);
-            addr.Property(a => a.Number).HasMaxLength(20);
-            addr.Property(a => a.Complement).HasMaxLength(50);
-            addr.Property(a => a.District).HasMaxLength(50);
-            addr.Property(a => a.City).HasMaxLength(80);
-            addr.Property(a => a.State).HasMaxLength(2);
-            addr.Property(a => a.PostalCode).HasMaxLength(9); 
-
-            addr.WithOwner();
         });
     }
 }

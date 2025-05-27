@@ -14,9 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\LocationReference\City\" />
-    <Folder Include="UseCases\LocationReference\PostalCode\" />
-    <Folder Include="UseCases\LocationReference\State\" />
+    <ProjectReference Include="..\Sig.SecurityService.Tenant.Common\Sig.SecurityService.Tenant.Common.csproj" />
   </ItemGroup>
 
 </Project>

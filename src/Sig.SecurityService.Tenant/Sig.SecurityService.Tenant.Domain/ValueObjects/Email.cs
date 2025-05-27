@@ -7,8 +7,5 @@ public sealed class Email
 {
     public string Address { get; set; }
 
-    public Email(string address)
-    {
-        Address = address;
-    }
+    public Email(string address) => Address = address;
 }
